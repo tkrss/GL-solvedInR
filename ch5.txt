@@ -1,0 +1,78 @@
+####Assign values for
+####  PARAMETERS
+alpha1=0.8
+alpha2=0.2
+chi=0.1
+lambda20 = 0.44196
+lambda22 = 1.1
+lambda23 = 1
+lambda24 = 0.03
+lambda30 = 0.3997
+lambda32 = 1
+lambda33 = 1.1
+lambda34 = 0.03
+theta=0.1938
+####  EXOGENOUS
+g=20
+r_bar = 0.03
+p_bl_bar = 20
+####  Opening values for stocks
+v = 95.803
+b_h = 37.839
+####b_s = 37.964
+b_s = 57.964
+bl_h = 1.892
+h_s = 20.125
+bl_s = bl_h
+b_cb = b_s - b_h
+b_h = b_d
+bl_h = bl_d
+####Opening values for lagged endogenous
+yd_r = 95.803
+r_b = r_bar
+p_bl = p_bl_bar
+####Create a model object
+####Determination of output - eq. 5.1
+ y = cons + g
+####Regular disposable income - eq. 5.2
+ yd_r = y - t + r_b(-1)*b_h(-1) + bl_h(-1)
+####Tax payments - eq. 5.3
+ t = theta*(y + r_b(-1)*b_h(-1) + bl_h(-1))
+####Wealth accumulation - eq. 5.4
+ v = v(-1) + (yd_r - cons) + cg
+####Capital gains on bonds - eq. 5.5
+ cg = (p_bl-p_bl(-1))*bl_h(-1)
+####Consumption function - eq. 5.6
+ cons = alpha1*yd_r_e + alpha2*v(-1)
+####Expected wealth - eq. 5.7
+ v_e = v(-1) + (yd_r_e - cons) + cg
+####Cash money - eq. 5.8
+ h_h = v - b_h - p_bl*bl_h
+####Demand for cash - eq. 5.9
+ h_d = v_e - b_d - p_bl*bl_d
+####Demand for government bills - eq. 5.10
+ b_d = v_e*(lambda20 + lambda22*r_b - lambda23*er_rbl - lambda24*(yd_r_e/v_e))
+####Demand for government bonds - eq. 5.11
+ bl_d = v_e*(lambda30 - lambda32*r_b + lambda33*er_rbl - lambda34*(yd_r_e/v_e))/p_bl
+####Supply of government bills - eq. 5.14
+ b_s = b_s(-1) + (g + r_b(-1)*b_s(-1) + bl_s(-1)) - (t + r_b(-1)*b_cb(-1)) -p_bl*(bl_s-bl_s(-1))
+####Supply of cash - eq. 5.15
+ h_s = h_s(-1) + b_cb - b_cb(-1)
+####Expected rate of return on bonds - eq. 5.18
+ er_rbl = r_bl+chi*(p_bl_e - p_bl)/p_bl
+####Interest rate on bonds - eq. 5.19
+ r_bl = 1/p_bl
+####Expected price of bonds - eq. 5.20
+ p_bl_e = p_bl
+####Expected capital gains - eq. 5.21
+ cg_e = chi*(p_bl_e - p_bl)*bl_h
+####Expected regular disposable income - eq. 5.22
+yd_r_e = yd_r(-1)
+########VARIABLES FOR SHOCKS
+#####wealth to disposable income ratio
+ WYD=v/yd_r
+#######Bonds to wealth ratio
+bills= b_h/v
+#######Bills to wealth ratio
+bonds= p_bl*bl_h/v
+timeline 1945 2010
