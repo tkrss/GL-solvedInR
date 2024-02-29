@@ -1,0 +1,82 @@
+###Assign values for
+###  PARAMETERS
+alpha0 = 15
+alpha1 = 0.8
+alpha2 = 0.1
+beta = 0.75
+eps = 0.75
+gamma = 0.25
+phi = 0.25
+sigmat = 0.15
+###  EXOGENOUS
+add = 0.02
+pr = 1
+r_l_bar = 0.04
+w = 0.86
+uc= 0.86
+r_l=0.04
+r_m=0.02
+###Create a model object
+###The production decision
+###Real output - eq. 9.1
+ y_k = s_k_e + in_k_e - in_k(-1)
+###Target level of real inventories - eq. 9.2
+ in_k_t = sigmat*s_k_e
+###Expected real inventories - eq. 9.3
+ in_k_e = in_k(-1) + gamma*(in_k_t - in_k(-1))
+###Real inventories - eq. 9.4
+ in_k = in_k(-1) + y_k - s_k
+###Expected real sales - eq. 9.5
+ s_k_e = beta*s_k(-1) + (1 - beta)*s_k_e(-1)
+###Real sales - eq. 9.6
+ s_k = c_k
+###Employment - eq. 9.7
+ n = y_k/pr
+###The wage bill - eq. 9.8
+ wb = n*w
+###Unit costs - eq. 9.9
+ uc = wb/y_k
+###Stock of inventories - eq. 9.10
+ in = in_k*uc
+###The pricing decision
+###Sales at current prices - eq. 9.11
+ s = p*s_k
+###Price level - eq. 9.12
+ p = (1 + phi)*nhuc
+###Normal historic unit costs - eq. 9.13
+ nhuc = (1 - sigmat)*uc + sigmat*(1 + r_l(-1))*uc(-1)
+###Firms profits - eq. 9.14
+ f = s - wb + in - in(-1) - r_l(-1)*in(-1)
+###The banking system
+###Supply of loans - eq. 9.16
+ l_s = l_d
+###Demand for loans - eq. 9.15
+ l_d = in
+###Supply of deposits - eq. 9.17
+ m_s = l_s
+###Interest rate on loans - eq. 9.18
+ r_l = r_l_bar
+###Interest rate on deposits - eq. 9.19
+ r_m = r_l - add
+###Realized banks profits - eq. 9.20
+ f_b = r_l(-1)*l_d(-1) - r_m(-1)*m_h(-1)
+###The consumption decision
+###Disposable income - eq. 9.21
+ yd = wb + f + f_b + r_m(-1)*m_h(-1)
+###Holding of banks deposit - eq. 9.22
+ m_h = m_h(-1) + yd - cons
+###Haig-Simons measure of real disposable income - eq. 9.23
+ yd_k_hs = c_k + (m_h_k - m_h_k(-1))
+###Consumption at current prices - eq. 9.24
+ cons = c_k*p
+###Real value of holding of banks deposit - eq. 9.25
+ m_h_k = m_h/p
+###Consumption decision - eq. 9.26
+ c_k = alpha0 + alpha1*yd_k_hse + alpha2*m_h_k(-1)
+###Expectation on Real HS disposable income - eq. 9.27
+ yd_k_hse = eps*yd_k_hs(-1) + (1 - eps)*yd_k_hse(-1)
+#####VARIABLES FOR SHOCKS
+####CHANGE IN INVENTORIES
+d.in_k= in_k - in_k(-1)
+d.in_k_e= in_k_e - in_k(-1)
+timeline 1945 2010
